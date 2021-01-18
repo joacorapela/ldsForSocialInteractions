@@ -11,6 +11,7 @@ processAll <- function() {
     nNeuronsToPlot <- 131
     sRate <- 1000
     videoIndex <- 2
+    interaction <- 1
     markerColor <- "rgb(128,128,128)"
     markerSize <- 3
     behaviorsRecsOpacity <- 0.3
@@ -19,7 +20,7 @@ processAll <- function() {
     spikesSamplesPattern <- "*.npy"
     boutTimesPath <- "../../../data/120120/Behavior"
     boutTimesPatternPattern <- "^.*%d_int.*_bouttimes.npz"
-    figFilenamePattern <- "../figures/rasterPlotAndBehavior_video%d.%s"
+    figFilenamePattern <- "../figures/rasterPlotAndBehavior_interaction%d.%s"
 
     sortSpikesSamplesFilenames <- function(filenames) {
         N <- length(filenames)
@@ -58,9 +59,9 @@ processAll <- function() {
     behaviorsRecs <- getBehaviorsRecs(boutTimesFilenames=boutTimesFilenames, behaviorsNames=behaviorsNames, behaviorsColorsa=behaviorsColors, behaviorsRecsOpacity=behaviorsRecsOpacity)
     fig <- fig%>%layout(shapes=behaviorRecs, xaxis=list(title="Time (sec)"), yaxis=list(title="Neuron Index"))
 
-    # pngFigFilename <- sprintf(figFilenamePattern, videoIndex, "png")
-    htmlFigFilename <- sprintf(figFilenamePattern, videoIndex, "html")
-    # orca(p=fig, file=pngFigFilename)
+    pngFigFilename <- sprintf(figFilenamePattern, interaction, "png")
+    htmlFigFilename <- sprintf(figFilenamePattern, interaction, "html")
+    orca(p=fig, file=pngFigFilename)
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFigFilename)), basename(htmlFigFilename)))
     print(fig)
 
