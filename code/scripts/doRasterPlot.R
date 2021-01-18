@@ -10,7 +10,6 @@ processAll <- function() {
     behaviorsColors <- c("black", "red", "green", "blue", "cyan", "orange")
     nNeuronsToPlot <- 131
     sRate <- 1000
-    videoIndex <- 2
     interaction <- 1
     markerColor <- "rgb(128,128,128)"
     markerSize <- 3
@@ -19,7 +18,7 @@ processAll <- function() {
     spikesSamplesPath <- "../../../data/120120/Neurons_BLA"
     spikesSamplesPattern <- "*.npy"
     boutTimesPath <- "../../../data/120120/Behavior"
-    boutTimesPatternPattern <- "^.*%d_int.*_bouttimes.npz"
+    boutTimesPatternPattern <- "^.*_int%d_bouttimes.npz"
     figFilenamePattern <- "../figures/rasterPlotAndBehavior_interaction%d.%s"
 
     sortSpikesSamplesFilenames <- function(filenames) {
@@ -38,10 +37,10 @@ processAll <- function() {
     }
 
     parameters <- read_yaml(file=parametersFilename)
-    videoStartTime <- parameters[["videoStart"]][videoIndex]
-    videoStopTime <- parameters[["videoStop"]][videoIndex]
+    interactionStartTime <- parameters[["InteractionStart"]][interaction]
+    interactionStopTime <- parameters[["InteractionStop"]][interaction]
 
-    boutTimesPattern <- sprintf(boutTimesPatternPattern, videoIndex)
+    boutTimesPattern <- sprintf(boutTimesPatternPattern, interaction)
     boutTimesFilenames <- list.files(path=boutTimesPath, pattern=boutTimesPattern)
 
     spikesSamplesFilenames <- list.files(path=spikesSamplesPath, pattern=spikesSamplesPattern)
@@ -52,7 +51,7 @@ processAll <- function() {
         spikesSamplesFilename <- sortedSpikesSamplesFilenames[[n]]
         spikesSamplesFullFilename <- file.path(spikesSamplesPath, spikesSamplesFilename)
         spikesSamples <- np$load(spikesSamplesFullFilename)
-        spikesSamplesToPlot <- spikesSamples[videoStartTime*sRate<=spikesSamples & spikesSamples<=videoStopTime*sRate]
+        spikesSamplesToPlot <- spikesSamples[interactionStartTime*sRate<=spikesSamples & spikesSamples<=interactionStopTime*sRate]
         traceName <- file_path_sans_ext(spikesSamplesFilename)
         fig <- fig%>%add_trace(x=spikesSamplesToPlot/sRate, y=rep(n, times=length(spikesSamplesToPlot)), marker=list(color=markerColor, size=markerSize), name=traceName, showlegend=TRUE)
     }
