@@ -11,8 +11,8 @@ results/*
 # !results/exampleMouse
 # !results/exampleMouse/.gitkeep
 data/*
-# !data/exampleMouse
-# !data/exampleMouse/*.ini
+!data/exampleMouse
+!data/exampleMouse/*.ini
 log/*
 # !log/exampleMouse
 # !log/exampleMouse/.gitkeep
