@@ -9,7 +9,7 @@ import configparser
 
 def main(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument("--binLDStimeSeriesINI", help="Bin LDS time series ini file", default="../../data/binLDStimeSeries.ini")
+    parser.add_argument("--binLDStimeSeriesINI", help="Bin LDS time series ini file", default="../../data/exampleMouse/binLDStimeSeries.ini")
     args = parser.parse_args()
 
     binLDStimeSeriesINI = args.binLDStimeSeriesINI
