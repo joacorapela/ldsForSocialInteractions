@@ -1,3 +1,5 @@
+library(reticulate)
+np <- import("numpy")
 
 getBehaviorsRecs <- function(boutTimesFilenames, boutTimesPath, behaviorsNames, behaviorsColors, behaviorsRecsOpacity, ymin, ymax) {
     behaviorsRecs <- list()
