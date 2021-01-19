@@ -51,16 +51,15 @@ if(!DEBUG) {
     modelsLogFilename <- arguments[[3]]
 
 } else {
-    # 46390734, 180.000000, 180.000000, 60.000000, 5, 0.000000, 0.400000, PPCA, -10923.367918, 23110.735836, -3692.318680, 141.450000
     analysisStartTimeSecs <- 341
     trainDurSecs <- 401
-    stateDim <- 6
+    stateDim <- 21
     stateInputMemorySecs <- 0.0
-    obsInputMemorySecs <- 0.4
+    obsInputMemorySecs <- 0.0
     initialCondMethod <- "PPCA"
-    binConfigFilename <- "../../data/firstMouse/binLDStimeSeries.ini"
-    estConfigFilename <- "../../data/firstMouse/estimation_DSSSM.ini"
-    modelsLogFilename <- "../../log/firstMouse/log_DSSSM.csv"
+    binConfigFilename <- "../../data/exampleMouse/binLDStimeSeries.ini"
+    estConfigFilename <- "../../data/exampleMouse/estimation_DSSSM.ini"
+    modelsLogFilename <- "../../log/exampleMouse/log_DSSSM.csv"
     nStartFA <- 5
     checkModelsLogFilename <- TRUE
 }
@@ -140,7 +139,7 @@ if(!DEBUG) {
             initialConds <- c(list(B=estRes$B, Z=estRes$Z), initialConds)
         } else {
             stop(sprintf("Invalid initialCondMethod=%s", initialCondMethod))
-        }
+    0   }
     }
     dsSSM <- emEstimationKF_SS_withOffsetsAndInputs(y=trainSqrtSpikeCounts, c=trainStateInputs, d=trainObsInputs, B0=initialConds$B, u0=initialConds$u, C0=initialConds$C, Q0=initialConds$Q, Z0=initialConds$Z, a0=initialConds$a, D0=initialConds$D, R0=initialConds$R, m0=initialConds$m0, V0=initialConds$V0, maxIter=maxIter, tol=tol, varsToEstimate=list(m0=TRUE, V0=TRUE, B=TRUE, u=TRUE, C=TRUE, Q=TRUE, Z=TRUE, a=TRUE, D=TRUE, R=TRUE), covsConstraints=covsConstraints)
     elapsedTime <- proc.time()[3]-startTime
@@ -156,6 +155,7 @@ if(!DEBUG) {
     estResFilename <- sprintf(estResFilenamePattern, estNumber)
     estRes <- list(dsSSM=dsSSM, AIC=AIC, initialConds=initialConds, stateDim=stateDim, stateInputMemorySecs=stateInputMemorySecs, obsInputMemorySecs=obsInputMemorySecs, trainSqrtSpikeCounts=trainSqrtSpikeCounts, stateInputs=trainStateInputs, obsInputs=trainObsInputs, sRate=sRate, startTime=analysisStartTimeSecs)
     save(estRes, file=estResFilename)
+    browser()
 }
 
 null <- processAll()

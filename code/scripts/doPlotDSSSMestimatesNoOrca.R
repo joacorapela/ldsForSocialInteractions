@@ -10,8 +10,8 @@ source("../commonSrc/stats/kalmanFilter/computeOneStepAheadObsPredStats.R")
 source("../commonSrc/plot/kalmanFilter/getPlotTrueInitialAndEstimatedMatrices.R")
 source("../commonSrc/plot/kalmanFilter/getPlotTrueInitialAndEstimatedVectors.R")
 source("../commonSrc/plot/kalmanFilter/getPlotStateSpectrum.R")
-source("../commonSrc/plot/kalmanFilter/getPlotOneStepAheadForecasts.R")
-source("../commonSrc/plot/kalmanFilter/getPlotSmoothedStates.R")
+source("../projectSrc/plot/kalmanFilter/getPlotOneStepAheadForecasts.R")
+source("../projectSrc/plot/kalmanFilter/getPlotSmoothedStates.R")
 source("../commonSrc/plot/kalmanFilter/getPlotPercentageExplainedVar.R")
 source("../commonSrc/plot/kalmanFilter/getPlotLogLik.R")
 source("../commonSrc/plot/getRecsForOnsetAndOffsetTimes.R")
@@ -69,7 +69,7 @@ plotAllRFsAllNeurons <- function(Z, B, C, D, stateInputMemorySamples, obsInputMe
         pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("allRFsNeuron%d", n), "png")
         htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("allRFsNeuron%d", n), "html")
         htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-        orca(p=fig, file=pngFilename)
+        # orca(p=fig, file=pngFilename)
         # print(fig)
         # browser()
     }
@@ -162,13 +162,13 @@ if(FALSE) {
     laserStimOff <- laserStimOff[toKeepIndices]
 }
 
-if(TRUE) {
+if(FALSE) {
     show("Plotting logLik")
     pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "logLik", "png")
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "logLik", "html")
     fig <- getPlotLogLik(logLik=dsSSM$logLik)
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
     show("Plotting B")
@@ -176,7 +176,7 @@ if(TRUE) {
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "B", "html")
     fig <- getPlotTrueInitialAndEstimatedMatrices(estimated=dsSSM$B)
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
     show("Plotting stateSpectrum")
@@ -184,7 +184,7 @@ if(TRUE) {
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "stateSpectrum", "html")
     fig <- getPlotStateSpectrum(B=dsSSM$B)
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
     show("Plotting U")
@@ -192,7 +192,7 @@ if(TRUE) {
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "U", "html")
     fig <- getPlotTrueInitialAndEstimatedVectors(estimated=dsSSM$u)
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
     if(!is.nan(stateInputMemorySecs)) {
@@ -208,7 +208,7 @@ if(TRUE) {
             htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, descriptor, "html")
             fig <- getPlotTrueInitialAndEstimatedMatrices(x=x, estimated=COneStim, estimatedLegendLabelPattern="state %d", xlab="Delay (sec)")
             htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-            orca(p=fig, file=pngFilename)
+            # orca(p=fig, file=pngFilename)
             # print(fig)
             Coffset <- Coffset + CblockSize
         }
@@ -219,7 +219,7 @@ if(TRUE) {
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "Q", "html")
     fig <- getPlotTrueInitialAndEstimatedVectors(estimated=diag(dsSSM$Q), xlab="State Index")
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
     show("Plotting m0")
@@ -227,7 +227,7 @@ if(TRUE) {
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "m0", "html")
     fig <- getPlotTrueInitialAndEstimatedVectors(estimated=dsSSM$m0, xlab="State Index")
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
     show("Plotting V0")
@@ -235,7 +235,7 @@ if(TRUE) {
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "V0", "html")
     fig <- getPlotTrueInitialAndEstimatedVectors(estimated=diag(dsSSM$V0), xlab="State Index")
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
     show("Plotting Z")
@@ -243,7 +243,7 @@ if(TRUE) {
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "Z", "html")
     fig <- getPlotTrueInitialAndEstimatedMatrices(estimated=dsSSM$Z)
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
     show("Plotting a")
@@ -251,7 +251,7 @@ if(TRUE) {
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "a", "html")
     fig <- getPlotTrueInitialAndEstimatedVectors(estimated=dsSSM$a, xlab="Observation Index")
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
     if(!is.nan(obsInputMemorySecs)) {
@@ -267,7 +267,7 @@ if(TRUE) {
             htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, descriptor, "html")
             fig <- getPlotTrueInitialAndEstimatedMatrices(x=x, estimated=DOneStim, estimatedLegendLabelPattern="neuron %d", xlab="Delay (sec)")
             htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-            orca(p=fig, file=pngFilename)
+            # orca(p=fig, file=pngFilename)
             # print(fig)
             Doffset <- Doffset + DblockSize
         }
@@ -278,20 +278,18 @@ if(TRUE) {
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "R", "html")
     fig <- getPlotTrueInitialAndEstimatedVectors(estimated=diag(dsSSM$R), xlab="Observation Index")
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
-}
 
     predStats <- computeOneStepAheadObsPredStats(xtt1=kfRes$xnn1[,1,], Vtt1=kfRes$Vnn1, Z=dsSSM$Z, a=as.vector(dsSSM$a), D=dsSSM$D, R=dsSSM$R, obsInputs=estRes$obsInputs[,1,])
 
-if(TRUE) {
     show("Plotting percExpVar")
     percExpVar <- computePercentageExplainedVar(observations=trainSqrtSpikeCounts, predictions=predStats$ytt1)
     pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "percExpVar", "png")
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "percExpVar", "html")
     fig <- getPlotPercentageExplainedVar(percExpVar=percExpVar)
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-    orca(p=fig, file=pngFilename)
+    # orca(p=fig, file=pngFilename)
     # print(fig)
 
 #     show("Plotting oneStepAheadForecasts")
@@ -302,7 +300,6 @@ if(TRUE) {
 #     orca(p=fig, file=pngFilename)
     # print(fig)
 
-}
     neuronsToPlot <- c(8, 40, 22, 28)
     # for(i in 1:nrow(predStats$ytt1)) {
     for(i in neuronsToPlot) {
@@ -311,9 +308,10 @@ if(TRUE) {
         htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("oneStepAheadForecastsNeuron%d", i), "html")
         fig <- getPlotOneStepAheadForecasts(time=time, obs=trainSqrtSpikeCounts, ytt1=predStats$ytt1, Wtt1=predStats$Wtt1, boutTimesPath=boutTimesPath, boutTimesFilenames=boutTimesFilenames, behaviorsToPlot=behaviorsToPlot, behaviorsColors=behaviorsColors, obsToPlot=c(i))
         htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-        orca(p=fig, file=pngFilename)
+        # orca(p=fig, file=pngFilename)
         # print(fig)
     }
+}
 
 #     show("Plotting smoothedStates")
 #     pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "smoothedStates", "png")
@@ -330,7 +328,7 @@ if(TRUE) {
         # fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, goStimOn=goStimOn, goStimOff=goStimOff, nogoStimOn=nogoStimOn, nogoStimOff=nogoStimOff, laserStimOn=laserStimOn, laserStimOff=laserStimOff, statesToPlot=c(i))
         fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, boutTimesPath=boutTimesPath, boutTimesFilenames=boutTimesFilenames, behaviorsToPlot=behaviorsToPlot, behaviorsColors=behaviorsColors)
         htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
-        orca(p=fig, file=pngFilename)
+        # orca(p=fig, file=pngFilename)
         # print(fig)
     }
     plotAllRFsAllNeurons(Z=dsSSM$Z, B=dsSSM$B, C=dsSSM$C, D=dsSSM$D, stateInputMemorySamples=stateInputMemorySamples, obsInputMemorySamples=obsInputMemorySamples, stateInputMemoryToPlotSamples=obsInputMemorySamples, sRate=sRate, figFilenamePattern=figFilenamePattern, mouseName=mouseName, estNumber=estNumber)

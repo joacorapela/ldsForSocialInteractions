@@ -4,8 +4,9 @@ cd ..
 set mouseName = exampleMouse
 
 set time = 02:00:00
-set mem = 4G
+set mem = 32G
 
+setenv binConfigFilename ../../data/{$mouseName}/binLDStimeSeries.ini
 setenv modelSelectionFile ../../data/{$mouseName}/modelSelection.txt
 setenv estConfigFilename ../../data/{$mouseName}/estimation_DSSSM.ini
 setenv modelsLogFilename ../../log/{$mouseName}/log_DSSSM.csv
