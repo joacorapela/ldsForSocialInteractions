@@ -12,8 +12,8 @@ source("../commonSrc/stats/kalmanFilter/estimateKFInitialCondFA.R")
 source("../commonSrc/stats/kalmanFilter/estimateKFInitialCondPPCA.R")
 
 processAll <- function() {
-DEBUG <- TRUE
-# DEBUG <- FALSE
+# DEBUG <- TRUE
+DEBUG <- FALSE
 if(!DEBUG) {
     option_list <- list(
         make_option(c("-a", "--analysisStartTimeSecs"), type="double", default=0, help="Analysis start time (sec)"),
@@ -91,7 +91,6 @@ if(!DEBUG) {
     selectedSamples <- which(analysisStartTimeSecs<=times & times<analysisStartTimeSecs+trainDurSecs)
     trainSpikeCounts <- timeSeries$spikeCounts[,selectedSamples]
     trainSpikeCounts <- trainSpikeCounts[1:40,]
-    browser()
     trainSqrtSpikeCounts <- sqrt(trainSpikeCounts)
     behavioralTimeSeries <- timeSeries$behavioralTimeSeries[,selectedSamples]
     numberOfInputs <- nrow(behavioralTimeSeries)
