@@ -95,8 +95,8 @@ processAll <- function() {
         timeSeriesFilenamePattern <- options$timeSeriesFilenamePattern
         figFilenamePattern <- options$figFilenamePattern
     } else {
-        mouseName <- "firstMouse"
-        estNumber <- 25417247
+        mouseName <- "exampleMouse"
+        estNumber <- 53386362
         behaviorsToPlot <- c("nonsocial", "approach", "following", "headhead", "headtail", "conspecific")
         behaviorsColors <- c("black", "red", "green", "blue", "cyan", "orange")
         estMetaDataFilenamePattern <- "../../results/%s/%08d_estimation.ini"
@@ -162,7 +162,7 @@ if(FALSE) {
     laserStimOff <- laserStimOff[toKeepIndices]
 }
 
-if(FALSE) {
+if(TRUE) {
     show("Plotting logLik")
     pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "logLik", "png")
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "logLik", "html")
@@ -284,7 +284,7 @@ if(FALSE) {
 
     predStats <- computeOneStepAheadObsPredStats(xtt1=kfRes$xnn1[,1,], Vtt1=kfRes$Vnn1, Z=dsSSM$Z, a=as.vector(dsSSM$a), D=dsSSM$D, R=dsSSM$R, obsInputs=estRes$obsInputs[,1,])
 
-if(FALSE) {
+if(TRUE) {
     show("Plotting percExpVar")
     percExpVar <- computePercentageExplainedVar(observations=trainSqrtSpikeCounts, predictions=predStats$ytt1)
     pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "percExpVar", "png")
@@ -309,7 +309,6 @@ if(FALSE) {
         show(sprintf("Plotting oneStepAheadForecast for neuron %d", i))
         pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("oneStepAheadForecastsNeuron%d", i), "png")
         htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("oneStepAheadForecastsNeuron%d", i), "html")
-browser()
         fig <- getPlotOneStepAheadForecasts(time=time, obs=trainSqrtSpikeCounts, ytt1=predStats$ytt1, Wtt1=predStats$Wtt1, boutTimesPath=boutTimesPath, boutTimesFilenames=boutTimesFilenames, behaviorsToPlot=behaviorsToPlot, behaviorsColors=behaviorsColors, obsToPlot=c(i))
         htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
         orca(p=fig, file=pngFilename)
@@ -328,7 +327,8 @@ browser()
         show(sprintf("Plotting smoothedState %d", i))
         pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("smoothedState%d", i), "png")
         htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("smoothedState%d", i), "html")
-        fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, goStimOn=goStimOn, goStimOff=goStimOff, nogoStimOn=nogoStimOn, nogoStimOff=nogoStimOff, laserStimOn=laserStimOn, laserStimOff=laserStimOff, statesToPlot=c(i))
+        # fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, goStimOn=goStimOn, goStimOff=goStimOff, nogoStimOn=nogoStimOn, nogoStimOff=nogoStimOff, laserStimOn=laserStimOn, laserStimOff=laserStimOff, statesToPlot=c(i))
+        fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, boutTimesPath=boutTimesPath, boutTimesFilenames=boutTimesFilenames, behaviorsToPlot=behaviorsToPlot, behaviorsColors=behaviorsColors)
         htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
         orca(p=fig, file=pngFilename)
         # print(fig)
