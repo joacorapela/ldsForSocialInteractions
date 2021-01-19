@@ -1,4 +1,4 @@
-getPlotSmoothedStates <- function(time, xtT, VtT, goStimOn, goStimOff, nogoStimOn, nogoStimOff, laserStimOn, laserStimOff, statesToPlot=NA, xlab="Time (sec)", ylab="Smoothed State", goStimColor="green", nogoStimColor="red", laserStimColor="blue", stimOpacity=0.2) {
+getPlotSmoothedStates <- function(time, xtT, VtT, boutTimesCol, boutTimesPath, boutTimesFilenames, behaviorsToPlot, behaviorsColors, xlab="Time (sec)", ylab="Smoothed State", behaviorsRecsOpacity=0.2, statesToPlot=NA) {
 
     M <- nrow(xtT)
     N <- ncol(xtT)
@@ -30,8 +30,8 @@ getPlotSmoothedStates <- function(time, xtT, VtT, goStimOn, goStimOff, nogoStimO
         fig <- fig%>%add_trace(x=time, y=cbLower, mode="lines", line=list(color="rgba(0,0,0,0)"), name=sprintf("state[,%d]", i), showlegend=FALSE, fill="tonexty", fillcolor=sprintf("rgba(%d,%d,%d,%f)", rgbValues[1,1], rgbValues[2,1], rgbValues[3,1], 0.2))
     }
     fig <- fig%>%layout(xaxis=list(title=xlab), yaxis=list(title=ylab))
-    stimRecs <- getStimRecs(goStimOn=goStimOn, goStimOff=goStimOff, nogoStimOn=nogoStimOn, nogoStimOff=nogoStimOff, laserStimOn=laserStimOn, laserStimOff=laserStimOff, ymin=ymin, ymax=ymax, goStimColor=goStimColor, nogoStimColor=nogoStimColor, laserStimColor=laserStimColor, stimOpacity=stimOpacity)
-    fig <- fig%>%layout(shapes=stimRecs)
+    behaviorsRecs <- getBehaviorsRecs(boutTimesFilenames=boutTimesFilenames, boutTimesPath=boutTimesPath, behaviorsNames=behaviorsToPlot, behaviorsColors=behaviorsColors, behaviorsRecsOpacity=behaviorsRecsOpacity, ymin=ymin, ymax=ymax)
+    fig <- fig%>%layout(shapes=behaviorsRecs)
 
     return(fig)
 }
