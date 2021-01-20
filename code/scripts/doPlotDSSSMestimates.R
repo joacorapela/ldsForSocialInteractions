@@ -10,12 +10,12 @@ source("../commonSrc/stats/kalmanFilter/computeOneStepAheadObsPredStats.R")
 source("../commonSrc/plot/kalmanFilter/getPlotTrueInitialAndEstimatedMatrices.R")
 source("../commonSrc/plot/kalmanFilter/getPlotTrueInitialAndEstimatedVectors.R")
 source("../commonSrc/plot/kalmanFilter/getPlotStateSpectrum.R")
-source("../commonSrc/plot/kalmanFilter/getPlotOneStepAheadForecasts.R")
-source("../commonSrc/plot/kalmanFilter/getPlotSmoothedStates.R")
 source("../commonSrc/plot/kalmanFilter/getPlotPercentageExplainedVar.R")
 source("../commonSrc/plot/kalmanFilter/getPlotLogLik.R")
 source("../commonSrc/plot/getRecsForOnsetAndOffsetTimes.R")
 source("../projectSrc/plot/getBehaviorsRecs.R")
+source("../projectSrc/plot/kalmanFilter/getPlotOneStepAheadForecasts.R")
+source("../projectSrc/plot/kalmanFilter/getPlotSmoothedStates.R")
 
 plotAllRFsAllNeurons <- function(Z, B, C, D, stateInputMemorySamples, obsInputMemorySamples, stateInputMemoryToPlotSamples, sRate, mouseName, figFilenamePattern, estNumber, xlab="Delay (sec)", ylab="Value") {
     if(stateInputMemorySamples!=0) {
@@ -98,7 +98,8 @@ processAll <- function() {
         mouseName <- "exampleMouse"
         estNumber <- 53386362
         behaviorsToPlot <- c("nonsocial", "approach", "following", "headhead", "headtail", "conspecific")
-        behaviorsColors <- c("black", "red", "green", "blue", "cyan", "orange")
+        # behaviorsColors <- c("black", "red", "green", "blue", "cyan", "orange")
+        behaviorsColors <- c("black", "red", "magenta", "blue", "cyan", "green")
         estMetaDataFilenamePattern <- "../../results/%s/%08d_estimation.ini"
         timeSeriesFilenamePattern <- "../../data/%s/binLDStimeSeries.ini"
         figFilenamePattern <- "../../figures/%s/%08d_%s.%s"
@@ -143,26 +144,6 @@ processAll <- function() {
     behavioralLabels <- rownames(data$behavioralTimeSeries)
 
 if(FALSE) {
-    goStimOn <- data$goStimOnSecs
-    goStimOff <- data$goStimOffSecs
-    toKeepIndices <- which(minTime<=goStimOn & goStimOff<=maxTime)
-    goStimOn <- goStimOn[toKeepIndices]
-    goStimOff <- goStimOff[toKeepIndices]
-
-    nogoStimOn <- data$nogoStimOnSecs
-    nogoStimOff <- data$nogoStimOffSecs
-    toKeepIndices <- which(minTime<=nogoStimOn & nogoStimOff<=maxTime)
-    nogoStimOn <- nogoStimOn[toKeepIndices]
-    nogoStimOff <- nogoStimOff[toKeepIndices]
-
-    laserStimOn <- data$laserStimOnSecs
-    laserStimOff <- data$laserStimOffSecs
-    toKeepIndices <- which(minTime<=laserStimOn & laserStimOff<=maxTime)
-    laserStimOn <- laserStimOn[toKeepIndices]
-    laserStimOff <- laserStimOff[toKeepIndices]
-}
-
-if(TRUE) {
     show("Plotting logLik")
     pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "logLik", "png")
     htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "logLik", "html")
@@ -282,9 +263,11 @@ if(TRUE) {
     # print(fig)
 }
 
-    predStats <- computeOneStepAheadObsPredStats(xtt1=kfRes$xnn1[,1,], Vtt1=kfRes$Vnn1, Z=dsSSM$Z, a=as.vector(dsSSM$a), D=dsSSM$D, R=dsSSM$R, obsInputs=estRes$obsInputs[,1,])
-
 if(TRUE) {
+    predStats <- computeOneStepAheadObsPredStats(xtt1=kfRes$xnn1[,1,], Vtt1=kfRes$Vnn1, Z=dsSSM$Z, a=as.vector(dsSSM$a), D=dsSSM$D, R=dsSSM$R, obsInputs=estRes$obsInputs[,1,])
+}
+
+if(FALSE) {
     show("Plotting percExpVar")
     percExpVar <- computePercentageExplainedVar(observations=trainSqrtSpikeCounts, predictions=predStats$ytt1)
     pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "percExpVar", "png")
@@ -293,6 +276,7 @@ if(TRUE) {
     htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
     orca(p=fig, file=pngFilename)
     # print(fig)
+}
 
 #     show("Plotting oneStepAheadForecasts")
 #     pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "oneStepAheadForecasts", "png")
@@ -302,9 +286,10 @@ if(TRUE) {
 #     orca(p=fig, file=pngFilename)
     # print(fig)
 
-}
-    neuronsToPlot <- c(8, 40, 22, 28)
-    # for(i in 1:nrow(predStats$ytt1)) {
+if(TRUE) {
+    # neuronsToPlot <- c(8, 40, 22, 28)
+    neuronsToPlot <- 1:nrow(predStats$ytt1)
+    # for(i in 1:nrow(predStats$ytt1)) {}
     for(i in neuronsToPlot) {
         show(sprintf("Plotting oneStepAheadForecast for neuron %d", i))
         pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("oneStepAheadForecastsNeuron%d", i), "png")
@@ -314,6 +299,7 @@ if(TRUE) {
         orca(p=fig, file=pngFilename)
         # print(fig)
     }
+}
 
 #     show("Plotting smoothedStates")
 #     pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, "smoothedStates", "png")
@@ -323,17 +309,21 @@ if(TRUE) {
 #     orca(p=fig, file=pngFilename)
     # print(fig)
 
+if(TRUE) {
     for(i in 1:nrow(ksRes$xnN)) {
         show(sprintf("Plotting smoothedState %d", i))
         pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("smoothedState%d", i), "png")
         htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("smoothedState%d", i), "html")
-        # fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, goStimOn=goStimOn, goStimOff=goStimOff, nogoStimOn=nogoStimOn, nogoStimOff=nogoStimOff, laserStimOn=laserStimOn, laserStimOff=laserStimOff, statesToPlot=c(i))
-        fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, boutTimesPath=boutTimesPath, boutTimesFilenames=boutTimesFilenames, behaviorsToPlot=behaviorsToPlot, behaviorsColors=behaviorsColors)
+        fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, boutTimesPath=boutTimesPath, boutTimesFilenames=boutTimesFilenames, behaviorsToPlot=behaviorsToPlot, behaviorsColors=behaviorsColors, statesToPlot=c(i))
         htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
         orca(p=fig, file=pngFilename)
         # print(fig)
     }
+}
+
+if(FALSE) {
     plotAllRFsAllNeurons(Z=dsSSM$Z, B=dsSSM$B, C=dsSSM$C, D=dsSSM$D, stateInputMemorySamples=stateInputMemorySamples, obsInputMemorySamples=obsInputMemorySamples, stateInputMemoryToPlotSamples=obsInputMemorySamples, sRate=sRate, figFilenamePattern=figFilenamePattern, mouseName=mouseName, estNumber=estNumber)
+}
 
 }
 
