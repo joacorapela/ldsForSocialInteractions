@@ -5,6 +5,7 @@ getStatesInputSelectivityWithMemory <- function(C, B, memorySamples) {
     Bpow <- diag(rep(1, times=nStates))
     for(i in 0:memorySamples) {
         S[,,i] <- Bpow%*%C
+        Bpow <- Bpow%*%B
     }
     return(S)
 }
