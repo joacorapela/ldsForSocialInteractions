@@ -10,12 +10,12 @@ source("../commonSrc/stats/kalmanFilter/computeOneStepAheadObsPredStats.R")
 source("../commonSrc/plot/kalmanFilter/getPlotTrueInitialAndEstimatedMatrices.R")
 source("../commonSrc/plot/kalmanFilter/getPlotTrueInitialAndEstimatedVectors.R")
 source("../commonSrc/plot/kalmanFilter/getPlotStateSpectrum.R")
-source("../projectSrc/plot/kalmanFilter/getPlotOneStepAheadForecasts.R")
-source("../projectSrc/plot/kalmanFilter/getPlotSmoothedStates.R")
 source("../commonSrc/plot/kalmanFilter/getPlotPercentageExplainedVar.R")
 source("../commonSrc/plot/kalmanFilter/getPlotLogLik.R")
 source("../commonSrc/plot/getRecsForOnsetAndOffsetTimes.R")
 source("../projectSrc/plot/getBehaviorsRecs.R")
+source("../projectSrc/plot/kalmanFilter/getPlotOneStepAheadForecasts.R")
+source("../projectSrc/plot/kalmanFilter/getPlotSmoothedStates.R")
 
 plotAllRFsAllNeurons <- function(Z, B, C, D, stateInputMemorySamples, obsInputMemorySamples, stateInputMemoryToPlotSamples, sRate, mouseName, figFilenamePattern, estNumber, xlab="Delay (sec)", ylab="Value") {
     if(stateInputMemorySamples!=0) {
@@ -325,7 +325,6 @@ if(FALSE) {
         show(sprintf("Plotting smoothedState %d", i))
         pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("smoothedState%d", i), "png")
         htmlFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("smoothedState%d", i), "html")
-        # fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, goStimOn=goStimOn, goStimOff=goStimOff, nogoStimOn=nogoStimOn, nogoStimOff=nogoStimOff, laserStimOn=laserStimOn, laserStimOff=laserStimOff, statesToPlot=c(i))
         fig <- getPlotSmoothedStates(time=time, xtT=ksRes$xnN[,1,], VtT=ksRes$VnN, boutTimesPath=boutTimesPath, boutTimesFilenames=boutTimesFilenames, behaviorsToPlot=behaviorsToPlot, behaviorsColors=behaviorsColors)
         htmlwidgets::saveWidget(as_widget(fig), file.path(normalizePath(dirname(htmlFilename)), basename(htmlFilename)))
         # orca(p=fig, file=pngFilename)
