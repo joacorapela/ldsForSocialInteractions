@@ -55,8 +55,9 @@ sortSpikesSamplesFilenames <- function(filenames) {
 getSpikeCounts <- function(spikesSamples, breaks) {
     nUnits <- length(spikesSamples)
     spikeCounts <- matrix(NA, nrow=nUnits, ncol=length(breaks)-1)
-    for(i in 1:nUnits) {
-        spikeCounts[i,] <- hist(spikesSamples[[i]], breaks=breaks, plot=FALSE)$counts
+    rownames(spikeCounts) <- names(spikesSamples)
+    for(neuronLabel in names(spikesSamples)) {
+        spikeCounts[neuronLabel,] <- hist(spikesSamples[[neuronLabel]], breaks=breaks, plot=FALSE)$counts
     }
     return(spikeCounts)
 }
@@ -100,8 +101,10 @@ getBehaviorsOnsetsAndOffsets <- function(behaviorsToUse, boutTimesPath, boutTime
         boutTimesFullFilename <- file.path(boutTimesPath, boutTimesFilename)
         behaviorsOnsetsAndOffsets <- np$load(boutTimesFullFilename)
         for(behaviorToUse in behaviorsToUse) {
-            behaviorOnsetsAndOffsets <- behaviorsOnsetsAndOffsets[[behaviorToUse]]
-            answer[[behaviorToUse]] <- rbind(answer[[behaviorToUse]], behaviorOnsetsAndOffsets)
+            if(behaviorToUse %in% behaviorsOnsetsAndOffsets$files) {
+                behaviorOnsetsAndOffsets <- behaviorsOnsetsAndOffsets[[behaviorToUse]]
+                answer[[behaviorToUse]] <- rbind(answer[[behaviorToUse]], behaviorOnsetsAndOffsets)
+            }
         }
     }
     return(answer)
@@ -125,7 +128,7 @@ processAll <- function() {
         arguments <- parseRes$args
         configFilename <- arguments[[1]]
     } else {
-        configFilename <- "../../data/firstMouse/binLDStimeSeries.ini"
+        configFilename <- "../../data/exampleMouse/binLDStimeSeries.ini"
     }
 
     config <- read.ini(configFilename)
@@ -133,19 +136,13 @@ processAll <- function() {
     sRate <- as.numeric(config$config_params$sRate)
     binSizeSecs <- as.numeric(config$config_params$binSizeSecs)
     behaviorsToUse <- eval(parse(text=config$behaviors$behaviorsToUse))
-    interactionNumber <- as.numeric(config$behaviors$interactionNumber)
+    startTime <- as.numeric(config$config_params$startTime)
+    stopTime <- as.numeric(config$config_params$stopTime)
     spikesSamplesPath <- config$filenames$spikesSamplesPath
     spikesSamplesPattern <- config$filenames$spikesSamplesPattern
     boutTimesPath <- config$filenames$boutTimesPath
-    boutTimesPatternPattern <- config$filenames$boutTimesPatternPattern
-    parametersFilename <- config$filenames$parametersFilename
+    boutTimesPattern <- config$filenames$boutTimesPattern
     binnedTimeSeriesFilenamePattern <- config$filenames$binnedTimeSeriesFilenamePattern
-
-    parameters <- read_yaml(file=parametersFilename)
-    interactionFolderName <- parameters[["folderName"]][interactionNumber]
-    videoNumber <- as.numeric(substr(interactionFolderName, 1, 1))
-    startTime <- parameters[["videoStart"]][videoNumber]
-    stopTime <- parameters[["videoStop"]][videoNumber]
 
     startSample <- startTime*sRate
     stopSample <- stopTime*sRate
@@ -158,7 +155,6 @@ processAll <- function() {
     breaks <- seq(from=startSample-binSizeSamples, to=stopSample+binSizeSamples, by=binSizeSamples)
     spikeCounts <- getSpikeCounts(spikesSamples=spikesSamples, breaks=breaks)
 
-    boutTimesPattern <- sprintf(boutTimesPatternPattern, interactionNumber)
     boutTimesFilenames <- list.files(path=boutTimesPath, pattern=boutTimesPattern)
     behaviorsOnsetsAndOffsets <- getBehaviorsOnsetsAndOffsets(behaviorsToUse=behaviorsToUse, boutTimesPath=boutTimesPath, boutTimesFilenames=boutTimesFilenames)
     # interactionCategories <- parameters[["interactionCategory"]]
@@ -169,7 +165,7 @@ processAll <- function() {
 
     timeSeries <- list(sRate=1.0/binSizeSecs, startTime=startTime, spikeCounts=spikeCounts, behavioralTimeSeries=behavioralTimeSeries)
 
-    binnedTimeSeriesFilename <- sprintf(binnedTimeSeriesFilenamePattern, interactionNumber)
+    binnedTimeSeriesFilename <- sprintf(binnedTimeSeriesFilenamePattern, startTime, stopTime)
     save(timeSeries, file=binnedTimeSeriesFilename)
 
     browser()
