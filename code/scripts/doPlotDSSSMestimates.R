@@ -265,7 +265,7 @@ if(FALSE) {
     # print(fig)
 }
 
-if(TRUE) {
+if(FALSE) {
     predStats <- computeOneStepAheadObsPredStats(xtt1=kfRes$xnn1[,1,], Vtt1=kfRes$Vnn1, Z=dsSSM$Z, a=as.vector(dsSSM$a), D=dsSSM$D, R=dsSSM$R, obsInputs=estRes$obsInputs[,1,])
 }
 
@@ -288,7 +288,7 @@ if(FALSE) {
 #     if(!no_static) orca(p=fig, file=pngFilename)
     # print(fig)
 
-if(TRUE) {
+if(FALSE) {
     # neuronsToPlot <- c(8, 40, 22, 28)
     neuronsToPlot <- 1:nrow(predStats$ytt1)
     # for(i in 1:nrow(predStats$ytt1)) {}
@@ -311,7 +311,7 @@ if(TRUE) {
 #     if(!no_static) orca(p=fig, file=pngFilename)
     # print(fig)
 
-if(TRUE) {
+if(FALSE) {
     for(i in 1:nrow(ksRes$xnN)) {
         show(sprintf("Plotting smoothedState %d", i))
         pngFilename <- sprintf(figFilenamePattern, mouseName, estNumber, sprintf("smoothedState%d", i), "png")
